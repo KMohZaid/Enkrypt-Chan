@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary
+bcrypt
+python-jose[cryptography]
+python-dotenv
+python-multipart
+asyncpg
+coloredlogs
+colorama

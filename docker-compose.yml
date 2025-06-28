@@ -1,0 +1,33 @@
+services:
+  backend:
+    container_name: enkrypt-chan-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_HOST_PORT}:8000"
+    volumes:
+      - ./backend/app:/code/app
+      - ./backend/enkryptchan.db:/code/enkryptchan.db
+    environment:
+      - FRONTEND_URL=${FRONTEND_URL}
+    stdin_open: true
+    tty: true
+
+  frontend:
+    container_name: enkrypt-chan-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_HOST_PORT}:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
