@@ -302,6 +302,7 @@ export default function ChatLayout({ user, onLogout }: ChatLayoutProps) {
 				<div className="flex-1">
 					{selectedContact ? (
 						<ChatWindow
+							key={selectedContact.username}
 							contact={selectedContact}
 							messages={messages}
 							onSendMessage={sendMessage}

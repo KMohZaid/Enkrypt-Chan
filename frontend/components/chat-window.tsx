@@ -1,14 +1,15 @@
 "use client";
 import { MoreVertical } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useIntersectionObserver } from "usehooks-ts";
 import ChatMessage from "@/components/chat-message";
 import MessageInput from "@/components/message-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
 import { formatDate } from "@/lib/utils";
 import type { Contact, Message, User } from "@/types";
+import Separator from "./separator";
 
 interface ChatWindowProps {
 	contact: Contact;
@@ -32,7 +33,66 @@ export default function ChatWindow({
 		if (!newMessage.trim()) return;
 		onSendMessage(newMessage.trim());
 		setNewMessage("");
+
+		setTimeout(() => {
+			endRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "end",
+			});
+		}, 500);
 	};
+
+	const endRef = useRef<HTMLDivElement>(null);
+	const unreadDividerRef = useRef<HTMLDivElement>(null);
+	const dividerMessageIdRef = useRef<number | string>(null);
+
+	const endIntersectionObserver = useIntersectionObserver({
+		threshold: 0.5,
+	});
+
+	const firstUnreadId = useMemo(() => {
+		if (!messages.length) return null;
+		return messages.find(
+			(message) => !message.is_read && message.sender === contact.username,
+		)?.id;
+	}, [messages]);
+
+	if (!dividerMessageIdRef.current)
+		// INFO: make sure divider stays at the same place
+		dividerMessageIdRef.current = firstUnreadId || null;
+
+	// INFO: On render, scroll to the first unread message OR to the bottom
+	useEffect(() => {
+		if (dividerMessageIdRef.current) {
+			unreadDividerRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "end",
+			});
+		} else {
+			endRef.current?.scrollIntoView({
+				behavior: "auto",
+				block: "end",
+			});
+		}
+	}, [dividerMessageIdRef.current]); // only run when dividerMessageIdRef changes, not scroll back to divider when message gets read
+
+	// INFO: scroll to end when messages change
+	useEffect(() => {
+		// if not at the end, don't scroll
+		if (!endIntersectionObserver.isIntersecting) return;
+
+		// don't scroll if there is 2 or more unread messages
+		if (
+			messages.filter(
+				(message) => !message.is_read && message.sender === contact.username,
+			).length > 1
+		)
+			return;
+		endRef.current?.scrollIntoView({
+			behavior: "smooth",
+			block: "end",
+		});
+	}, [messages.length]);
 
 	// INFO: Memoize grouped messages to prevent recalculation on every render
 	const groupedMessages = useMemo(
@@ -105,7 +165,18 @@ export default function ChatWindow({
 										message.sender === contact.username;
 
 									return (
-										<div key={message.id} className="mb-2">
+										<div
+											key={message.id}
+											ref={
+												dividerMessageIdRef.current === message.id
+													? unreadDividerRef
+													: undefined
+											}
+										>
+											{/* INFO: divider for unread messages */}
+											{dividerMessageIdRef.current === message.id && (
+												<Separator message={"Unread Messages"} />
+											)}
 											<ChatMessage
 												contact={contact}
 												message={message}
@@ -119,6 +190,8 @@ export default function ChatWindow({
 								})}
 							</div>
 						))}
+						<div ref={endIntersectionObserver.ref} />
+						<div ref={endRef} />
 					</div>
 				</ScrollArea>
 			</div>
