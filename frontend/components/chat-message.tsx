@@ -38,7 +38,7 @@ export default function ChatMessage({
 	}, [isUnread, interactObserver]);
 
 	return (
-		<div ref={isUnread ? interactObserver?.ref : null}>
+		<div className="my-2" ref={isUnread ? interactObserver?.ref : null}>
 			<div
 				className={`flex items-end gap-3 ${isSelfUser ? "justify-end" : "justify-start"}`}
 			>
