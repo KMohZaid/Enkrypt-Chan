@@ -4,19 +4,29 @@
 
 ## Phase 1: Basic Chat App (MVP)
 
-- [ ] Design and implement user registration & login
-- [ ] Allow searching for users by username
-- [ ] connect with backend
+- [x] Design and implement user registration & login
+- [x] Allow searching for users by username
+  - [ ] Improve search feature
+- [x] connect with backend
 - [ ] Create chat UI (CLI, TUI, or Web)
-  - [ ] Web UI with React/Next.js
-  - [ ] CLI/TUI with Rust
-- [ ] Store plain-text message history (client/server)
-- [ ] Ensure basic stability and usability
-- [ ] Display message history in chat UI
-- [ ] Display unread message in chat list
-- [ ] separate new unread messages with a divider
+  - [ ] Web UI with React/Next.js (ONGOING)
+  - [ ] CLI/TUI with Rust (IN FUTURE, NOT PRIORITY)
+- [x] Store plain-text message history (client/server)
+- [x] Display message history in chat UI
+  - [ ] Add "Jump to Bottom" button
+- [x] Display unread message in chat list
+- [x] separate new unread messages with a divider
 - [ ] Send notification for new messages
 - [ ] Implement profile picture upload
+  > Using dummy image for now from [pravtar](https://pravatar.cc/)
+- [ ] Implement feature for updating profile picture and name
+- [x] Indicate if user is online is connected to server or not
+- [ ] Indicate contact online status
+- [ ] Queue messages to send if connection is not established with server
+    > No queue needed for receiving messages as initially they are received via API
+- [ ] Improve dark theme and fix light theme 
+    > Right now, light theme is just like discord's light theme...
+- [ ] Ensure basic stability and usability
 
 ## Phase 2: End-to-End Encryption (E2EE)
 
