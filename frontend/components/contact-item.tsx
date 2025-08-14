@@ -16,7 +16,7 @@ export default function ContactItem({
 }: ContactItemProps) {
 	return (
 		<div
-			className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700 ${isSelected ? "bg-gradient-to-r from-pink-50 to-purple-50 border-l-4 border-pink-500 dark:from-pink-900/20 dark:to-purple-900/20 dark:border-pink-400" : ""}`}
+			className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700 ${isSelected ? "bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 dark:border-pink-400" : ""}`}
 			onClick={onSelect}
 		>
 			<div className="relative">
