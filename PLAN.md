@@ -13,7 +13,7 @@
   - [ ] CLI/TUI with Rust (IN FUTURE, NOT PRIORITY)
 - [x] Store plain-text message history (client/server)
 - [x] Display message history in chat UI
-  - [ ] Add "Jump to Bottom" button
+  - [x] Add "Jump to Bottom" button
 - [x] Display unread message in chat list
 - [x] separate new unread messages with a divider
 - [ ] Send notification for new messages

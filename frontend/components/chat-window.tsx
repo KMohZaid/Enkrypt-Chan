@@ -1,10 +1,11 @@
 "use client";
-import { MoreVertical } from "lucide-react";
+import { ArrowDown, MoreVertical } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useIntersectionObserver } from "usehooks-ts";
 import ChatMessage from "@/components/chat-message";
 import MessageInput from "@/components/message-input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDate } from "@/lib/utils";
@@ -56,6 +57,20 @@ export default function ChatWindow({
 			(message) => !message.is_read && message.sender === contact.username,
 		)?.id;
 	}, [messages]);
+
+	const handleScrollDown = () => {
+		if (dividerMessageIdRef.current) {
+			unreadDividerRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "end",
+			});
+		} else {
+			endRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "end",
+			});
+		}
+	};
 
 	if (!dividerMessageIdRef.current)
 		// INFO: make sure divider stays at the same place
@@ -194,6 +209,23 @@ export default function ChatWindow({
 						<div ref={endRef} />
 					</div>
 				</ScrollArea>
+				{/* INFO: Scroll to bottom button */}
+				{!endIntersectionObserver.isIntersecting && (
+					<Button
+						onClick={handleScrollDown}
+						variant="ghost"
+						size="icon"
+						className="animate-bounce absolute bottom-6 right-6 rounded-full h-12 w-12 bg-pink-500/80 hover:bg-pink-600/90 text-white shadow-lg backdrop-blur-sm"
+					>
+						<ArrowDown className="h-6 w-6" />
+						{/* TODO: make a component for unread badge (bcz it is repeated in contact-item.tsx) (just not absolute positioning)*/}
+						{contact.unread_count > 0 && (
+							<Badge className="absolute -top-2 left-1/2 -translate-x-1/2  bg-purple-600 text-white">
+								{contact.unread_count > 999 ? "999+" : contact.unread_count}
+							</Badge>
+						)}
+					</Button>
+				)}
 			</div>
 
 			<MessageInput
@@ -204,3 +236,4 @@ export default function ChatWindow({
 		</div>
 	);
 }
+

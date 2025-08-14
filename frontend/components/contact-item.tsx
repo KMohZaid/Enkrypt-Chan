@@ -43,9 +43,9 @@ export default function ContactItem({
 					<p className="text-sm text-gray-500 dark:text-gray-400 truncate">
 						{contact.last_message}
 					</p>
-					{Number(contact.unread_count) > 0 && (
-						<Badge className="bg-pink-500 text-black text-xs w-5 h-5 flex items-center justify-center rounded-full p-0">
-							{contact.unread_count}
+					{contact.unread_count > 0 && (
+						<Badge className="bg-purple-600 text-white">
+							{contact.unread_count > 999 ? "999+" : contact.unread_count}
 						</Badge>
 					)}
 				</div>
