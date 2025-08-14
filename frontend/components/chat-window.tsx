@@ -58,6 +58,8 @@ export default function ChatWindow({
 		)?.id;
 	}, [messages]);
 
+	// TODO: This is taking to divider ref instead of first unread message. so if first unread change it will always put to divider
+	// Idea is to check if divider is being intersected and if so, go to endRef
 	const handleScrollDown = () => {
 		if (dividerMessageIdRef.current) {
 			unreadDividerRef.current?.scrollIntoView({
@@ -236,4 +238,3 @@ export default function ChatWindow({
 		</div>
 	);
 }
-
