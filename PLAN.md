@@ -16,6 +16,8 @@
   - [x] Add "Jump to Bottom" button
 - [x] Display unread message in chat list
 - [x] separate new unread messages with a divider
+- [x] Implement emoji picker
+  - [ ] Add reaction support on messages
 - [ ] Send notification for new messages
 - [ ] Implement profile picture upload
   > Using dummy image for now from [pravtar](https://pravatar.cc/)
@@ -35,6 +37,10 @@
 ## Phase 3: Media Support
 
 - [ ] Enable users to send image/file messages
+- [ ] Implement multi-media support (images, videos, files, etc.)
+  - [ ] Add in-app media preview (selected image, video and file)
+  - [ ] Add in-app camera and audio recording
+  - [ ] Add in-app video/audio player
 - [ ] Encrypt files using a symmetric key before upload
 - [ ] Add media preview or download support on recipient side
 
