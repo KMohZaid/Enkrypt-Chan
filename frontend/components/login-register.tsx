@@ -1,7 +1,7 @@
 "use client";
-import { Heart, Loader2, Sparkles } from "lucide-react";
+import { Camera, Heart, Loader2, Sparkles } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { API_URL } from "@/lib/config";
 
 import type { User } from "@/types";
+import ImageCropper from "./image-cropper";
 
 interface LoginRegisterProps {
 	onLogin: (user: User) => void;
@@ -27,10 +28,37 @@ export default function LoginRegister({ onLogin }: LoginRegisterProps) {
 		name: "",
 		username: "",
 		password: "",
+		profilePicture: "",
 	});
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [activeTab, setActiveTab] = useState("login");
+	const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+	const [showCropper, setShowCropper] = useState(false);
+	const [originalImage, setOriginalImage] = useState<string | null>(null);
+	const cropperRef = useRef<any>(null);
+
+	const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files[0]) {
+			// INFO: Read as Data URL (base64), Data URL is much easier to work with
+			const reader = new FileReader();
+			reader.onload = () => {
+				setOriginalImage(reader.result as string);
+				setShowCropper(true);
+			};
+			reader.readAsDataURL(e.target.files[0]);
+		} else {
+			setRegisterForm({ ...registerForm, profilePicture: "" });
+			setAvatarPreview(null);
+		}
+	};
+
+	// INFO: Handle cropped image data url
+	const handleCrop = (image: string) => {
+		setAvatarPreview(image);
+		setShowCropper(false);
+		setRegisterForm({ ...registerForm, profilePicture: image });
+	};
 
 	const handleLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -71,24 +99,33 @@ export default function LoginRegister({ onLogin }: LoginRegisterProps) {
 		setError("");
 
 		try {
+			const formData = new FormData();
+			formData.append("name", registerForm.name.trim());
+			formData.append("username", registerForm.username.trim());
+			formData.append("password", registerForm.password);
+			if (registerForm.profilePicture) {
+				formData.append("profile_picture", registerForm.profilePicture);
+			}
+
 			const response = await fetch(`${API_URL}/register`, {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					name: registerForm.name.trim(),
-					username: registerForm.username.trim(),
-					password: registerForm.password,
-				}),
+				body: formData,
 			});
 
 			if (response.ok) {
 				setError("");
 				setActiveTab("login");
 				setLoginForm({
-					username: registerForm.username,
+					...registerForm,
 					password: registerForm.password,
 				});
-				setRegisterForm({ name: "", username: "", password: "" });
+				setRegisterForm({
+					name: "",
+					username: "",
+					password: "",
+					profilePicture: "",
+				});
+				setAvatarPreview(null);
 			} else {
 				const errorData = await response.json();
 				setError(errorData.detail || "Registration failed");
@@ -212,6 +249,35 @@ export default function LoginRegister({ onLogin }: LoginRegisterProps) {
 							</TabsContent>
 							<TabsContent value="register" className="space-y-4 mt-6">
 								<form onSubmit={handleRegister} className="space-y-4">
+									<div className="flex flex-col items-center space-y-2">
+										<label
+											htmlFor="avatar-upload"
+											className="relative flex flex-col items-center justify-center w-24 h-24 rounded-full border-2 border-dashed border-purple-300 cursor-pointer bg-purple-50 hover:bg-purple-100 dark:border-purple-600 dark:bg-gray-700 dark:hover:bg-gray-600"
+										>
+											<Input
+												id="avatar-upload"
+												type="file"
+												className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+												accept="image/*"
+												onChange={handleAvatarChange}
+											/>
+											{avatarPreview ? (
+												<Image
+													src={avatarPreview}
+													alt="Avatar Preview"
+													fill
+													className="object-cover rounded-full"
+												/>
+											) : (
+												<>
+													<Camera className="w-8 h-8 text-purple-400" />
+													<span className="text-xs text-center text-purple-500 dark:text-purple-300">
+														Upload Profile Photo
+													</span>
+												</>
+											)}
+										</label>
+									</div>
 									<div>
 										<Input
 											type="text"
@@ -282,6 +348,15 @@ export default function LoginRegister({ onLogin }: LoginRegisterProps) {
 					</CardContent>
 				</Card>
 			</div>
+			{originalImage && (
+				<ImageCropper
+					open={showCropper}
+					onOpenChange={setShowCropper}
+					image={originalImage}
+					onCrop={handleCrop}
+					cropperRef={cropperRef}
+				/>
+			)}
 		</div>
 	);
 }
