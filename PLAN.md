@@ -8,14 +8,12 @@
 - [x] Allow searching for users by username
   - [ ] Improve search feature
 - [x] connect with backend
-- [ ] Create chat UI (CLI, TUI, or Web)
-  - [ ] Web UI with React/Next.js (ONGOING)
-  - [ ] CLI/TUI with Rust (IN FUTURE, NOT PRIORITY)
 - [x] Store plain-text message history (client/server)
 - [x] Display message history in chat UI
   - [x] Add "Jump to Bottom" button
 - [x] Display unread message in chat list
-- [x] separate new unread messages with a divider
+- [x] Separate new unread messages with a divider
+- [ ] Add markdown support
 - [x] Implement emoji picker
   - [ ] Add reaction support on messages
 - [ ] Send notification for new messages
@@ -65,4 +63,6 @@
 - [ ] Add support for disappearing messages
 - [ ] Implement group chats with multi-user E2E
 - [ ] Package the client app as a standalone executable or installer
-
+- [ ] Create chat UI (CLI, TUI, or Web)
+  - [ ] Web UI with React/Next.js (ONGOING)
+  - [ ] CLI/TUI with Rust (IN FUTURE, NOT PRIORITY)
