@@ -48,3 +48,13 @@ export function formatDate(timestamp: string | null) {
 		return null;
 	}
 }
+
+export function shortenText(text: string | null, maxLength: number = 25) {
+	if (!text) {
+		return "";
+	}
+	if (text.length <= maxLength) {
+		return text;
+	}
+	return text.slice(0, maxLength) + "...";
+}

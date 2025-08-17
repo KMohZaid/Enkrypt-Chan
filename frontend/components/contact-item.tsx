@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { formatTime } from "@/lib/utils";
+import { formatTime, shortenText } from "@/lib/utils";
 import type { Contact } from "@/types";
 
 interface ContactItemProps {
@@ -41,7 +41,7 @@ export default function ContactItem({
 				</div>
 				<div className="flex items-center justify-between">
 					<p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-						{contact.last_message}
+						{shortenText(contact.last_message)}
 					</p>
 					{contact.unread_count > 0 && (
 						<Badge className="bg-purple-600 text-white">
