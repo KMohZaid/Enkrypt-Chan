@@ -49,6 +49,7 @@ export function formatDate(timestamp: string | null) {
 	}
 }
 
+// TODO: maybe add "..." If we don't exceed maxLength but newline is present?
 export function shortenText(text: string | null, maxLength: number = 25) {
 	if (!text) {
 		return "";

@@ -63,7 +63,7 @@ export default function ChatMessage({
 					<div
 						className={`px-4 py-2 rounded-2xl ${isSelfUser ? "bg-white border border-pink-500 text-gray-900 dark:bg-gray-800 dark:text-white" : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"}`}
 					>
-						<p className="text-sm">{message.text}</p>
+						<div className="text-sm" style={{ whiteSpace: "pre-wrap" }}>{message.text}</div>
 						<div
 							className={`flex items-center gap-1 mt-1 ${isSelfUser ? "justify-end" : "justify-start"}`}
 						>
